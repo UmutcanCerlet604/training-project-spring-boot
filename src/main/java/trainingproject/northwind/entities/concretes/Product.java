@@ -41,6 +41,17 @@ public class Product {
 }
 
 /*
+     @Table anatasyonu;
+     - Uygulama ayağa kalktığında bu nesnenin aslında bir veritabanı tablosuna karşılık geldiğini ve o tablonun hangisi olduğunu söylüyor.
+     - Postgres veritabanımızda product adında bir tablomuz var. Bu sınıftan üretilen nesne ona karşılık gelir.
+     - Veritabanında isimlendirme yaparken çoğul isimler kullanırız. Çünkü tablo birden fazla ürünü tutar.
+     - Bizim sınıfımızdan üretilen her nesne bir ürüne karşılık gelir. Kodu yazarken tekil yazmamızın sebebi biz bu sınıftan bir nesneyi new ile oluşturduğumuzda tek producta karşılık gelmesidir.
+
+*/
+
+
+
+/*
     Lombok sayesinde constructor oluşur ve getter setter metotları da otomatik bir şekilde yapılır.
     @Entity - Hiç bir class çıplak kalmamalı
     Spring boot bunun için anatasyonları kullanır. @Entity, bir anatasyondur.

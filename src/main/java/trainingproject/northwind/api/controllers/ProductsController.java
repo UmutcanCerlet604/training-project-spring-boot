@@ -26,6 +26,41 @@ public class ProductsController {
     }
 }
 
+/*
+    Api katmanında controller bulunur.
+    Api katmanı dış dünyayla iletişim kurmamızı sağlar.
+    Bir mobil uygulamayla, farklı bir web uygulamasıyla, masaüstü uygulamasıyla iletişimi kuracak ortak iletişim yöntemini kuruyoruz.
+    Ortak iletişimi sağlayan faktör json gibi standart haline gelmiş veri tipidir. Bu veri tipini kullanarak iki farklı ortamdaki yazılım birbiri ile anlaşabilir.
+    ProductController burada basit bir getAll() fonksiyonu içerir.
+    Onun bir restcontroller olabilmesi için (yani javada olmayanlarda beni tanısın diye) ve rest mimarisi için @RestController anatasyonunu ekliyoruz.
+    Devamında api için bir mapping yapıyoruz. domain - kodlama.io/api/getall
+    Eğer birisi bizim domainimizin sonuna /getall ifadesiyle birlikte istek atarsa bizim getAll() fonksiyonumuz çalışır ve ürünlerimizi getirir.
+
+    Api sadece datayı göndermez. İşlemin başarılı olup olmadığı bilgisini de gönderir.
+    Datanın üstünde işlemin başarılı olup olmadığına dair bilgileri de göndermeliyiz.
+    Uygulamamızı biraz daha profosyonelleştireceğiz.
+    Requestlere response verirken standardize ediyor olacağız.
+
+    İki tip istek vardır;
+    - Ben bir data istiyorum.
+    - Ben bir data gönderiyorum bunu kaydet.
+    Ürünlerin listelenmesi - get request
+
+    Üç tane bilgi olması gerekir;
+    - Data
+    - İşlem sonucu (başarılı mı ? başarısız mı ?)
+    - Mesaj bilgisi
+
+    Bu üç bilgiden ikisi zorunludur.
+    İşlem sonucu ve mesaj bilgisi kesinlikle olmalıdır.
+    Fakat data zorunlu değildir.
+    Bunu sadece burada değil bütün projelerimizde bunu kullanabiliriz.
+
+    Bizim bunu bütün projelerimizde kullanabilmemiz için bir katman oluşturmuştuk.
+    core - bütün projelerimde kullanacağım ortak kodları bu package altına yerleştireceğim anlamına geliyor.
+
+*/
+
 
 /*
     Api isimlendirme kuralları - ProductsController
@@ -78,4 +113,9 @@ public class ProductsController {
     Aynı autowired çözümlemesini burada da yaptık. /api/products/getall isteği geldiğinde bu metot çalışacaktır.
 
     Bir sonraki derste standart bir servis dönüşümü (result mekanizması) kuruyor olacağız.
+
+    Swagger'ı implemente etmemiz gerekiyor.
+    Swagger birçok ortamda çalışabilen, hızlı bir biçimde test etmemizi sağlayan bir arayüz ortamı sağlıyor.
+    Dökümantasyon süreci içinde oldukça yararlıdır.
+    Postman veya tarayıcı kullanmadan hızlı bir biçimde test etmemizi sağlıyor.
 */

@@ -26,6 +26,25 @@ public class ProductManager implements ProductService {
 }
 
 /*
+    ProductService sınıfı bizim soyut sınıfımızdır.
+    ProductManager sınıfı ise asıl bizim işi yaptığımız sınıftır.
+    Override kullanarak metotu ezip kendi yapmak istediğimiz işlemleri yapıyoruz.
+    ProductService interface'ini implemente ediyoruz.
+    Bunun içerisinde veri erişim katmanını kullanacağız.
+    Burada constructorda parametre olarak veri erişim katmanındaki interface'i veriyoruz.
+    Bu işlemi constructor injection yöntemiyle yapmış olduk.
+    Constructor injection; Bir bağımlılığı constructor üzerinden enjekte etmektir.
+    ProductDao kendi scope'u dışında hiçbir yerde kullanılamaz.
+    En yukarıda geçici (sahte) bir sınıf oluşturduk.
+    ProductDao bir interface'dir. Interfaceler new ile oluşturulamaz.
+    Peki burada nasıl çalışıyor ?
+    Bunu da autowired ile yaparız.
+    Autowired, ProductDao'nun bir somut sınıfını arıyor. Bulduğu nesneyi new ile oluşturup bize verir.
+    Biz bu noktada özellikle birşey yapmadık. JpaRepository Springin kendi içerisinde implementasyonu var.
+    Onu vermiş olduğundan bizim extra birşey yapmamıza gerek yok.
+*/
+
+/*
     Burada ne yaptık ?
     - ProductDao injectionu yaptık.
     - Burada bir sınıf yok.
