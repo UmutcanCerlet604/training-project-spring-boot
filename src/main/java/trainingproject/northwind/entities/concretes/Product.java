@@ -1,20 +1,33 @@
 package trainingproject.northwind.entities.concretes;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "products")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // Id'yi sen oluşturmayacaksın. Postgre tarafında otomatik olarak oluşturulacak diyoruz.
+    // Buna strategy denir. Veritabanları türüne göre değişiklik gösterir.
+    // Oracle - sequence
     @Column(name = "product_id")
     private int id;
 
-    @Column(name = "category_id")
-    private int categoryId;
+    //    Bunu tutmamıza gerek yok artık. (İlişkiyi kurduğumuz için)
+    //    Bu yöntem farklı ORM lerde farklı davranabilir.
+    //    Bu alan tekrarını entity frameworkte verebiliriz. Entity framework buna kızmaz.
+    //    Veritabanında bu alan olduğu için bunu tanımlayabiliriz diye söyler.
+    //    Hibernate bu alanı duplicate edilmiş alan olarak tanımlar.
+    //
+    //    @Column(name = "category_id")
+    //    private int categoryId;
 
     @Column(name = "product_name")
     private String productName;
@@ -28,17 +41,49 @@ public class Product {
     @Column(name = "quantity_per_unit")
     private String quantityPerUnit;
 
-    public Product(){}
+    @ManyToOne()
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    public Product(int id, int categoryId, String productName, double unitPrice, short unitsInStock, String quantityPerUnit) {
-        this.id = id;
-        this.categoryId = categoryId;
-        this.productName = productName;
-        this.unitPrice = unitPrice;
-        this.unitsInStock = unitsInStock;
-        this.quantityPerUnit = quantityPerUnit;
-    }
 }
+
+/*
+    @Column(name = "category_id")
+    private int categoryId;
+
+    Bunu tutmamıza gerek yok artık. (İlişkiyi kurduğumuz için)
+    Bu yöntem farklı ORM lerde farklı davranabilir.
+    Bu alan tekrarını entity frameworkte verebiliriz. Entity framework buna kızmaz.
+    Veritabanında bu alan olduğu için bunu tanımlayabiliriz diye izin verir.
+    Hibernate bu alanı duplicate edilmiş alan olarak tanımlar.
+    Burada category nesnesinin içinde categoryId zaten bulunduğu için tekrar ediyoruz diye algılar.
+
+    Bunun nedeni;
+    Hibernate arka planda product için bütün kolonları oluşturur.
+    Extra olarak sanki product'ın kolonlarıymış gibi category'nin kolonlarını da yanına koyuyor.
+    Bu yüzden biz category olarak verdiğimiz için aynı zamanda category'nin içinde categoryId bulunduğu için ayrıca bizim categoryId olarak yeni bir alan oluşturmamıza gerek kalmıyor.
+    Bu ORM'ler ilişkilendirme yaptığımızda biz aksini belirtmediğimiz sürece primary key üzerinden ilişkilendirmeleri yaparlar.(Default'u budur.)
+
+    Category için many to one ilişkisi kurduk.
+    Neden ?
+    Product tablosunu düşündüğümüz zaman tabloda birden çok kategori olduğunu görürüz.
+    Bir kategori birden fazla kez tekrar ediyor.
+    Many - product // one - category oluyor.
+    Nasıl ilişkilendirecek ?
+    category_id üzerinden join işlemi yapacak.
+    Diğer tarafta yani kategorinin içinde ayrıca kolon olarak vermeme nedenim primary key olan category_id kullanmamdır.
+
+
+*/
+
+/*
+    Burada da many to one ilişki vardır.
+    Buradaki product join olmaya çalışıyor aslında.
+    Category tablosunun product tablosu ile ilgili hiç bir bilgisi yoktur.
+    Biz join işlemini product tablosundaki category_id ile category tablosundaki category_id eşitlendiği anda bunları maplemiş olacağız.
+    Bu şekilde aslında biz bu product'ın categorysi nedir şeklinde tutuyoruz.
+    Buradaki ilişkilendirmeyi doğru yaparsak JpaRepository ile işlemlerimizi daha kolay halledebileceğiz.
+*/
 
 /*
      @Table anatasyonu;
@@ -46,6 +91,17 @@ public class Product {
      - Postgres veritabanımızda product adında bir tablomuz var. Bu sınıftan üretilen nesne ona karşılık gelir.
      - Veritabanında isimlendirme yaparken çoğul isimler kullanırız. Çünkü tablo birden fazla ürünü tutar.
      - Bizim sınıfımızdan üretilen her nesne bir ürüne karşılık gelir. Kodu yazarken tekil yazmamızın sebebi biz bu sınıftan bir nesneyi new ile oluşturduğumuzda tek producta karşılık gelmesidir.
+
+    @Data anatasyonu;
+    Lombok bizim için getter ve setter işlemlerini yapar.
+
+    Parametreli ve parametresiz constructorlarımızı sildik.
+
+    @AllArgsConstructor;
+    Lombok bizim adımıza @AllArgsConstructor anatasyonu ile otomatik olarak parametreli constructorları oluşturur.
+
+    @NoArgsConstructor;
+    Lombok bizim adımıza @NoArgsConstructor anatasyonu ile parametresiz constructorı da oluşturur.
 
 */
 
