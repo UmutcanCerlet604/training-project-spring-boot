@@ -6,6 +6,7 @@ import trainingproject.northwind.business.abstracts.ProductService;
 import trainingproject.northwind.core.utilities.results.DataResult;
 import trainingproject.northwind.core.utilities.results.Result;
 import trainingproject.northwind.entities.concretes.Product;
+import trainingproject.northwind.entities.dtos.ProductWithCategoryDTO;
 
 import java.util.List;
 
@@ -76,6 +77,11 @@ public class ProductsController {
     @GetMapping("/getAllDesc")
     public DataResult<List<Product>> getAllSorted(){
         return this.productService.getAllSorted();
+    }
+
+    @GetMapping("/getAllProductsDetails")
+    public DataResult<List<ProductWithCategoryDTO>> getProductWithCategoryDetails(){
+        return this.productService.getProductWithCategoryDetails();
     }
 
 }

@@ -3,6 +3,7 @@ package trainingproject.northwind.dataAccess.abstracts;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import trainingproject.northwind.entities.concretes.Product;
+import trainingproject.northwind.entities.dtos.ProductWithCategoryDTO;
 
 import java.util.List;
 
@@ -18,7 +19,57 @@ public interface ProductDao extends JpaRepository<Product, Integer> {
     @Query("From Product where productName=:productName and category.categoryId=:categoryId")
     List<Product> getByNameAndCategory(String productName, int categoryId);
 
+    // İmza
+    @Query("Select new trainingproject.northwind.entities.dtos.ProductWithCategoryDTO" +
+            "(p.id, p.productName, c.categoryName) From Category c Inner Join c.products p")
+    List<ProductWithCategoryDTO> getProductWithCategoryDetails();
+
 }
+
+/*
+    JPA'dan joinle gelen datayı business'ta DTO'nun içine set etsek hata mıdır ?
+    Buna nasıl karar vereceğiz ?
+    Join işlemi sonucunda 100 tane kolon gelebilir.
+    Biz * şeklinde atarsak 100 tane kolon gelir.(Performans için ciddi sorun olur.)
+    Yazdığımız query'de bir mapping işlemi var fakat burayı kodlamadan ziyade classlarımızdan getirdiğimiz için bu şekilde yazabiliyoruz.
+    Bizim burada yazdığımız aslında bir select sorgusudur. Bu yüzden sakıncalı değildir.
+    JPQL yazarken bizim javadaki entityleri kullanarak yazarız.
+*/
+
+/*
+    Normalde sql'de join işlemini yaparken sıra farketmez.
+    Bunu JPQL'de yaparken de aynı şekilde yapabiliriz. (.Net - link)
+    Fakat biz burada one to many şeklinde gitsek daha iyi olabilir.
+    İlişki one to one ise önce base tabloyu koysak daha iyi olabilir.
+
+     select p.product_id, p.productName, c.categoryName from Category c inner join Product p
+     on c.category_id = p.category_id
+
+     Bu işlemi yapacağız.
+
+     From ifadesini kullanırsak tüm alanları çekeriz.
+     Özellikle bazı alanları çekeceksek burada da Select ifadesi var.
+     *  yerine seçtiğim bazı kolonları getirmek istediğim için Select ile başlıyorum.
+
+     Burada normal kod yazar gibi yazıyoruz.
+     Ben burada bazı alanları dediğimde bu alanları ProductWithCategoryDTO'ya atamak istiyorum.
+     Bu yüzden join yazarken ilgili DTO'nun package name'i çekmemiz gerekiyor.
+     Ardından sınıfın ismini yazıyoruz.
+     @AllArgsConstructor anotasyonu burada önemlidir.
+     Burada aynı kod yazarken gibi yazıyoruz.
+     Aslında arka planda new işlemi ile constructorı çalıştıracaktır.
+     ProductWithCategoryDTO()'ya From'dan sonraki alanları aktaracağız.
+     Sql'de yaptığımız gibi join yaptığımız için alias kullanabiliriz.
+     Devamında join türünü belirteceğiz.
+     Sonrasında da c'nin productları içerisinden yani category ile ilişkilendirilmiş productlardan çek diyoruz.
+     Bu yüzden base tablosunu öne koymak önemlidir.
+     On koşulunu JPQL'de yazmamıza gerek yoktur. Neden ?
+     Biz product ve category'yi ilişkilendirirken zaten join yapmıştık. Bu yüzden gerekli değildir.
+     Burada almak istediğimiz alanları objelerimizi düşünerek belirliyoruz. Veritabanı tablolarını düşünmememiz gerekiyor.
+     JPARepository bu query'yi çalıştırır. Sonrasında List<ProductWithCategoryDTO>'ya atama yapar.
+
+
+*/
 
 /*
     getBy JPARepository'e özgü bir durumdur. getBy kullandığımızda where koşulu yazması gerektiğini bilir.
@@ -32,7 +83,6 @@ public interface ProductDao extends JpaRepository<Product, Integer> {
     ProductManager'da niye hata almadık. Buradaki kod derlenmiyor. JPARepositroy içerisindeki kod derlendiği için sorun gözüküyor.
     ProductManager'da biz metotun ismini farklı birşey de verebilirdik. Doğrusu aynı isimlendirme kullandırmaktır.
     Category_CategoryId yerine Category ismini de kullansak metotta bir sorun yaşamazdık.
-
 */
 
 /*

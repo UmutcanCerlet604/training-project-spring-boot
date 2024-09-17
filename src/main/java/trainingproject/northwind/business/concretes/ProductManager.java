@@ -14,6 +14,7 @@ import trainingproject.northwind.core.utilities.results.SuccessDataResult;
 import trainingproject.northwind.core.utilities.results.SuccessResult;
 import trainingproject.northwind.dataAccess.abstracts.ProductDao;
 import trainingproject.northwind.entities.concretes.Product;
+import trainingproject.northwind.entities.dtos.ProductWithCategoryDTO;
 
 
 import java.util.List;
@@ -104,6 +105,11 @@ public class ProductManager implements ProductService {
                 (this.productDao.getByNameAndCategory(productName, categoryId), "Data Listelendi");
     }
 
+    @Override
+    public DataResult<List<ProductWithCategoryDTO>> getProductWithCategoryDetails() {
+        return new SuccessDataResult<List<ProductWithCategoryDTO>>
+                (this.productDao.getProductWithCategoryDetails(), "Data Listelendi");
+    }
 
 
     // ProductDao'ya implemente edilmiş JpaRepository yardımıyla save fonksiyonuyla kaydetme işlemini yaptık.

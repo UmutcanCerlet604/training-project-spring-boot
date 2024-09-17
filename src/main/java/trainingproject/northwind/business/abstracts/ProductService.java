@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.Query;
 import trainingproject.northwind.core.utilities.results.DataResult;
 import trainingproject.northwind.core.utilities.results.Result;
 import trainingproject.northwind.entities.concretes.Product;
+import trainingproject.northwind.entities.dtos.ProductWithCategoryDTO;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public interface ProductService {
     DataResult<List<Product>> getByProductNameContains(String productName);
     DataResult<List<Product>> getByProductNameStartsWith(String productName);
     DataResult<List<Product>> getByNameAndCategory(String productName, int categoryId);
-
+    DataResult<List<ProductWithCategoryDTO>> getProductWithCategoryDetails();
 
 
 }
